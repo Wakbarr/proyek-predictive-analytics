@@ -2,11 +2,9 @@
 
 ## Domain Proyek
 
-Harga cryptocurrency, khususnya Ethereum, sangat fluktuatif dan dipengaruhi oleh berbagai faktor pasar yang kompleks. Para investor dan trader sering kali kesulitan dalam memprediksi pergerakan harga untuk pengambilan keputusan yang tepat. Pendekatan tradisional dalam analisis harga cenderung reaktif, di mana keputusan diambil setelah perubahan harga terjadi. Oleh karena itu, diperlukan solusi prediktif yang dapat memberikan wawasan lebih awal tentang potensi pergerakan harga di masa depan.
+Harga cryptocurrency, khususnya Ethereum, dikenal sangat fluktuatif dan dipengaruhi oleh berbagai faktor pasar yang kompleks. Investor dan trader sering kali kesulitan memprediksi pergerakan harga untuk membuat keputusan yang tepat. Analisis tradisional cenderung reaktif, di mana keputusan diambil setelah perubahan harga terjadi. Oleh karena itu, pendekatan prediktif berbasis machine learning diperlukan untuk memberikan wawasan proaktif tentang potensi pergerakan harga di masa depan.
 
-Dengan memanfaatkan teknik machine learning, proyek ini bertujuan untuk membangun model yang dapat memprediksi harga Ethereum 30 hari ke depan berdasarkan data historis. Pendekatan ini memungkinkan analisis yang lebih proaktif, membantu investor dalam merencanakan strategi investasi yang lebih baik. Proyek ini menerapkan tiga model machine learning: K-Nearest Neighbors (KNN), Random Forest, dan AdaBoost, untuk membandingkan performa dan menemukan algoritma terbaik dalam memprediksi harga Ethereum.
-
-Dataset yang digunakan adalah data historis Ethereum yang mencakup berbagai metrik harga harian, seperti harga pembukaan, tertinggi, terendah, dan penutupan. Dataset ini bersumber dari Kaggle.
+Proyek ini bertujuan membangun model machine learning untuk memprediksi harga penutupan Ethereum 30 hari ke depan berdasarkan data historis. Tiga model yang digunakan adalah K-Nearest Neighbors (KNN), Random Forest, dan AdaBoost, dengan perbandingan performa untuk menemukan algoritma terbaik. Dataset yang digunakan adalah data historis Ethereum dari Kaggle, tersedia di [https://www.kaggle.com/datasets/akbarwidianto/ethereum-historical-data](https://www.kaggle.com/datasets/akbarwidianto/ethereum-historical-data).
 
 ## Business Understanding
 
@@ -18,100 +16,97 @@ Dataset yang digunakan adalah data historis Ethereum yang mencakup berbagai metr
 
 ## Goals
 
-Tujuan yang ingin dicapai dalam proyek ini adalah:
-
-* Membangun model machine learning yang dapat memprediksi harga penutupan Ethereum 30 hari ke depan.
-* Membandingkan performa tiga model machine learning (KNN, Random Forest, dan AdaBoost) untuk menentukan model terbaik.
-* Mengidentifikasi fitur yang paling berpengaruh dalam memprediksi harga Ethereum.
+* Membangun model machine learning untuk memprediksi harga penutupan Ethereum 30 hari ke depan.
+* Membandingkan performa KNN, Random Forest, dan AdaBoost untuk menentukan model terbaik.
+* Mengidentifikasi fitur yang paling berpengaruh dalam prediksi harga Ethereum.
 
 ## Solution Statement
 
-Untuk mencapai tujuan tersebut, langkah-langkah yang akan dilakukan adalah:
-
-1. Melakukan Exploratory Data Analysis (EDA) untuk memahami karakteristik data dan hubungan antar fitur.
-2. Menerapkan tiga model machine learning: K-Nearest Neighbors (KNN), Random Forest, dan AdaBoost untuk memprediksi harga Ethereum.
-3. Mengevaluasi performa model menggunakan metrik Mean Squared Error (MSE) dan R² Score untuk menentukan model terbaik.
+* Melakukan Exploratory Data Analysis (EDA) untuk memahami karakteristik data dan hubungan antar fitur.
+* Menerapkan KNN, Random Forest, dan AdaBoost untuk memprediksi harga Ethereum.
+* Mengevaluasi performa model dengan metrik Mean Squared Error (MSE) dan R² Score untuk menentukan model terbaik.
 
 ## Data Understanding
 
-Dataset yang digunakan dalam proyek ini adalah data historis Ethereum yang mencakup periode harian dengan total **2160 baris** dan **10 kolom**. Data ini bersumber dari **Kaggle**. Berikut adalah uraian lengkap seluruh fitur pada dataset:
+Dataset yang digunakan adalah data historis Ethereum dari Kaggle ([https://www.kaggle.com/datasets/akbarwidianto/ethereum-historical-data](https://www.kaggle.com/datasets/akbarwidianto/ethereum-historical-data)), dengan 2160 baris dan 9 kolom. Berikut adalah deskripsi fitur:
 
-| No | Kolom     | Tipe Data | Deskripsi                                          |
-| -- | --------- | --------- | -------------------------------------------------- |
-| 1  | SNo       | int64     | Nomor urut data, sebagai indeks atau penanda baris |
-| 2  | Name      | object    | Nama koin kripto, dalam hal ini "Ethereum"         |
-| 3  | Symbol    | object    | Simbol dari koin, "ETH"                            |
-| 4  | Date      | object    | Tanggal pencatatan data                            |
-| 5  | High      | float64   | Harga tertinggi pada hari tersebut                 |
-| 6  | Low       | float64   | Harga terendah pada hari tersebut                  |
-| 7  | Open      | float64   | Harga pembukaan pada hari tersebut                 |
-| 8  | Close     | float64   | Harga penutupan pada hari tersebut                 |
-| 9  | Volume    | float64   | Volume transaksi pada hari tersebut                |
-| 10 | Marketcap | float64   | Kapitalisasi pasar pada hari tersebut              |
+| No | Kolom     | Tipe Data | Deskripsi                                  |
+| -- | --------- | --------- | ------------------------------------------ |
+| 1  | SNo       | int64     | Nomor urut data, sebagai penanda baris     |
+| 2  | Name      | object    | Nama koin kripto, dalam hal ini "Ethereum" |
+| 3  | Symbol    | object    | Simbol koin, "ETH"                         |
+| 4  | High      | float64   | Harga tertinggi pada hari tersebut         |
+| 5  | Low       | float64   | Harga terendah pada hari tersebut          |
+| 6  | Open      | float64   | Harga pembukaan pada hari tersebut         |
+| 7  | Close     | float64   | Harga penutupan pada hari tersebut         |
+| 8  | Volume    | float64   | Volume transaksi pada hari tersebut        |
+| 9  | Marketcap | float64   | Kapitalisasi pasar pada hari tersebut      |
+
+**Catatan:** Kolom Date tidak ada dalam dataset asli tetapi ditambahkan sebagai indeks saat memuat data dengan `pd.read_csv()` dan `set_index('Date')`.
 
 ### Kondisi Data
 
-* **Missing Values:** Tidak ada nilai yang hilang di seluruh kolom dataset, sehingga data sudah lengkap untuk dianalisis.
-* **Duplikasi Data:** Tidak ditemukan baris yang duplikat, menunjukkan bahwa setiap entri data bersifat unik.
-* **Outlier:** Terdapat outlier pada kolom harga (Open, High, Low, Close) dan volume transaksi. Outlier ini kemudian ditangani pada tahap Data Preparation menggunakan metode Interquartile Range (IQR) untuk memastikan kualitas data yang lebih baik.
+* **Missing Values:** Tidak ada nilai kosong pada dataset awal.
+* **Duplikasi Data:** Tidak ada baris duplikat.
+* **Outlier:** Terdapat outlier pada kolom harga (Open, High, Low, Close), yang ditangani pada tahap Data Preparation.
 
-### Univariate Analysis EDA
+## Univariate Analysis
 
-* **Distribusi Harga Penutupan (Close):** Harga penutupan Ethereum menunjukkan variasi yang signifikan, yang mencerminkan sifat volatilitas tinggi pada pasar cryptocurrency. Distribusi ini tidak simetris dan memiliki beberapa puncak (multimodal).
-* **Distribusi Volume:** Volume transaksi bervariasi secara signifikan, dengan beberapa periode menunjukkan lonjakan aktivitas perdagangan yang tinggi, kemungkinan terkait dengan peristiwa pasar tertentu.
+* **Distribusi Harga Penutupan (Close):** Variasi harga tinggi, distribusi multimodal, mencerminkan volatilitas pasar cryptocurrency.
+* **Distribusi Volume:** Variasi signifikan, dengan lonjakan pada periode tertentu.
 
-### Multivariate Analysis EDA
+## Multivariate Analysis
 
-* **Korelasi Antar Fitur:** Terdapat korelasi yang sangat kuat antara fitur harga (Open, High, Low, Close), dengan nilai korelasi mendekati 1. Hal ini menunjukkan bahwa fitur-fitur tersebut saling berkaitan erat dan bergerak bersama dalam pola yang serupa.
-* **Hubungan dengan Volume:** Volume transaksi menunjukkan korelasi yang lebih lemah dengan fitur harga. Hal ini mengindikasikan bahwa volume mungkin tidak secara langsung memengaruhi pergerakan harga dalam jangka pendek, meskipun tetap relevan untuk analisis lebih lanjut.
+* **Korelasi Antar Fitur:** Kolom harga (Open, High, Low, Close) memiliki korelasi mendekati 1, menunjukkan pergerakan seragam.
+* **Hubungan dengan Volume:** Korelasi lemah antara Volume dan harga, menunjukkan pengaruh terbatas dalam jangka pendek.
 
 ## Data Preparation
 
-Berikut adalah tahapan lengkap pemrosesan data yang dilakukan:
+Berikut tahapan pemrosesan data secara runtut:
 
-### Pembersihan Data
+1. **Pembersihan Data**
 
-* Menghapus Kolom Tidak Relevan: Kolom SNo, Name, Symbol, Volume, dan Marketcap dihapus karena tidak relevan dengan prediksi harga.
-* Menghapus Nilai Kosong: Baris dengan nilai kosong dihapus untuk memastikan integritas data.
-* Penanganan Outlier: Outlier dideteksi dan dihapus menggunakan metode Interquartile Range (IQR) untuk meningkatkan kualitas data.
+   * Menghapus Kolom Tidak Relevan: Kolom SNo, Name, Symbol, Volume, dan Marketcap dihapus karena tidak relevan untuk prediksi.
+   * Penanganan Outlier: Outlier dihapus menggunakan metode Interquartile Range (IQR).
 
-### Konversi Tipe Data
+2. **Pembuatan Fitur**
 
-* Kolom Date diubah dari tipe object menjadi datetime dan dijadikan indeks untuk mempermudah analisis berbasis waktu.
+   * OHLC\_Average: Rata-rata dari Open, High, Low, dan Close untuk menangkap tren harian.
+   * Price\_After\_Month: Target prediksi, dibuat dengan menggeser Close 30 hari ke depan.
 
-### Pembuatan Fitur
+3. **Penghapusan Nilai Kosong**
 
-* **OHLC\_Average:** Fitur baru dibuat dengan menghitung rata-rata dari Open, High, Low, dan Close untuk menangkap tren harga harian.
-* **Price\_After\_Month:** Target prediksi dibuat dengan menggeser kolom Close sebanyak 30 hari ke depan.
+   * Baris dengan nilai kosong (akibat penggeseran Close) dihapus dengan `dropna()`.
 
-### Pemisahan Fitur dan Target
+4. **Pemisahan Fitur dan Target**
 
-* Fitur (X) berisi semua kolom kecuali Price\_After\_Month, sedangkan target (y) adalah Price\_After\_Month.
+   * Fitur (X): Semua kolom kecuali Price\_After\_Month.
+   * Target (y): Price\_After\_Month.
 
-### Normalisasi Data
+5. **Normalisasi Data**
 
-* Fitur dinormalisasi menggunakan StandardScaler untuk memastikan skala yang seragam antar variabel.
+   * Fitur dinormalisasi dengan StandardScaler untuk skala seragam.
 
-### Pembagian Data
+6. **Pembagian Data**
 
-* Dataset dibagi menjadi 80% data latih dan 20% data uji menggunakan fungsi `train_test_split` dari sklearn dengan `random_state=42` untuk konsistensi.
+   * Data dibagi: 80% latih, 20% uji, dengan `random_state=42`.
 
 ## Modeling
 
-Tiga model machine learning diterapkan untuk memprediksi harga Ethereum:
+Tiga model machine learning diterapkan:
 
-* **K-Nearest Neighbors (KNN):** Model berbasis jarak dengan parameter `n_neighbors=10`.
-* **Random Forest:** Model ensemble dengan parameter `n_estimators=50`, `max_depth=16`, `random_state=42`.
-* **AdaBoost:** Model boosting dengan parameter `n_estimators=50`, `learning_rate=0.05`, `random_state=42`.
+* **K-Nearest Neighbors (KNN):** n\_neighbors=10.
+* **Random Forest:** n\_estimators=50, max\_depth=16, random\_state=42.
+* **AdaBoost:** n\_estimators=50, learning\_rate=0.05, random\_state=42.
 
-Setiap model dilatih dengan data latih dan dievaluasi dengan data uji.
+Setiap model dilatih dan dievaluasi.
 
 ## Evaluation
 
 ### Metrik Evaluasi
 
-* **Mean Squared Error (MSE):** Mengukur rata-rata kuadrat error antara prediksi dan nilai aktual.
-* **R² Score:** Mengukur seberapa baik model menjelaskan variabilitas data.
+* **Mean Squared Error (MSE)**
+* **R² Score**
 
 ### Hasil Evaluasi
 
@@ -119,36 +114,31 @@ Setiap model dilatih dengan data latih dan dievaluasi dengan data uji.
 * **Random Forest:** MSE = 7163.01, R² = 0.7955
 * **AdaBoost:** MSE = 6203.98, R² = 0.8229
 
-Model Random Forest menunjukkan performa terbaik dengan MSE terendah, meskipun KNN memiliki R² tertinggi.
+**Analisis:** KNN memiliki MSE terendah dan R² tertinggi, menunjukkan performa terbaik.
 
-### Hubungan dengan Business Understanding
+## Hubungan dengan Business Understanding
 
-* **Menjawab Problem Statement:** Model berhasil memprediksi harga penutupan Ethereum 30 hari ke depan, dengan Random Forest memberikan hasil paling akurat. Fitur harga (Open, High, Low, Close) terbukti paling berpengaruh.
-* **Mencapai Goals:** Perbandingan performa menunjukkan Random Forest sebagai model terbaik. Fitur yang berpengaruh juga telah diidentifikasi melalui EDA dan proses pemodelan.
-* **Dampak Solusi:** Prediksi ini memungkinkan investor untuk merencanakan strategi investasi secara proaktif, meskipun volatilitas pasar tetap menjadi faktor yang perlu diperhatikan.
+* Prediksi harga 30 hari ke depan tercapai dengan **KNN** sebagai model terbaik.
+* Fitur harga (Open, High, Low, Close) paling berpengaruh.
+* Investor dapat merencanakan strategi proaktif, meski volatilitas pasar tetap tantangan.
 
 ## Visualisasi
 
-Plot prediksi vs data aktual untuk 100 data pertama menunjukkan bahwa Random Forest mampu mengikuti tren harga dengan baik.
+* **Prediksi vs Aktual:** Plot 100 data pertama menunjukkan Random Forest mengikuti tren dengan baik.
+![image](https://github.com/user-attachments/assets/775c6a77-014d-4537-91ae-4a6d06d161d2)
 
-![image](https://github.com/user-attachments/assets/a5bbd903-a7e0-4902-9eac-982d1446ddbe)
 
-
-Prediksi Harga Ethereum 30 Hari ke Depan.
-
-![image](https://github.com/user-attachments/assets/7c1a2daa-3215-4431-8249-05d7d23ef28f)
-
+* **Prediksi 30 Hari:** Visualisasi harga prediksi dengan KNN menunjukkan proyeksi realistis.
+![image](https://github.com/user-attachments/assets/5f976074-5d16-4772-a49a-4ba1a826ff0a)
 
 
 ## Kesimpulan
 
-* **Random Forest** adalah model terbaik untuk memprediksi harga Ethereum 30 hari ke depan berdasarkan data historis.
-* Fitur harga (Open, High, Low, Close) memiliki pengaruh signifikan dalam prediksi.
-* Prediksi ini dapat membantu investor merencanakan strategi, dengan catatan bahwa pasar cryptocurrency sangat fluktuatif.
+* **KNN** adalah model terbaik untuk memprediksi harga Ethereum 30 hari ke depan.
+* Fitur harga (Open, High, Low, Close) sangat berpengaruh.
+* Prediksi ini membantu investor, meski pasar sangat fluktuatif.
 
 ## Referensi
 
-* Dicoding. Diakses pada 20 Oktober 2023 dari [https://www.dicoding.com/academies/319-machine-learning-terapan](https://www.dicoding.com/academies/319-machine-learning-terapan)
-* Kaggle. Dataset Ethereum: [[https://www.kaggle.com/datasets/akbarwidianto/ethereum-historical-data]([https://www.kaggle.com/datasets/akbarw/ethereum](https://www.kaggle.com/datasets/akbarw/ethereum))]([https://www.kaggle.com/datasets/akbarwidianto/ethereum-historical-data](https://www.kaggle.com/datasets/akbarw/ethereum))
-
-
+* Dicoding: [https://www.dicoding.com/academies/319-machine-learning-terapan](https://www.dicoding.com/academies/319-machine-learning-terapan)
+* Kaggle Dataset: [https://www.kaggle.com/datasets/akbarwidianto/ethereum-historical-data](https://www.kaggle.com/datasets/akbarwidianto/ethereum-historical-data)
