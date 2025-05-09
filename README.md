@@ -34,7 +34,7 @@ Untuk mencapai tujuan tersebut, langkah-langkah yang akan dilakukan adalah:
 
 ## Data Understanding
 
-Dataset yang digunakan adalah data historis Ethereum yang mencakup periode harian dengan jumlah data 2160 baris dan 10 kolom. Data ini bersumber dari Kaggle. Berikut adalah uraian seluruh fitur pada dataset:
+Dataset yang digunakan dalam proyek ini adalah data historis Ethereum yang mencakup periode harian dengan total **2160 baris** dan **10 kolom**. Data ini bersumber dari **Kaggle**. Berikut adalah uraian lengkap seluruh fitur pada dataset:
 
 | No | Kolom     | Tipe Data | Deskripsi                                          |
 | -- | --------- | --------- | -------------------------------------------------- |
@@ -49,15 +49,21 @@ Dataset yang digunakan adalah data historis Ethereum yang mencakup periode haria
 | 9  | Volume    | float64   | Volume transaksi pada hari tersebut                |
 | 10 | Marketcap | float64   | Kapitalisasi pasar pada hari tersebut              |
 
-## Univariate Analysis EDA
+### Kondisi Data
 
-* **Distribusi Harga Penutupan (Close):** Harga penutupan Ethereum menunjukkan variasi yang signifikan, mencerminkan volatilitas pasar cryptocurrency.
-* **Distribusi Volume:** Volume transaksi bervariasi, dengan beberapa puncak yang menunjukkan aktivitas perdagangan tinggi pada periode tertentu.
+* **Missing Values:** Tidak ada nilai yang hilang di seluruh kolom dataset, sehingga data sudah lengkap untuk dianalisis.
+* **Duplikasi Data:** Tidak ditemukan baris yang duplikat, menunjukkan bahwa setiap entri data bersifat unik.
+* **Outlier:** Terdapat outlier pada kolom harga (Open, High, Low, Close) dan volume transaksi. Outlier ini kemudian ditangani pada tahap Data Preparation menggunakan metode Interquartile Range (IQR) untuk memastikan kualitas data yang lebih baik.
 
-## Multivariate Analysis EDA
+### Univariate Analysis EDA
 
-* **Korelasi Antar Fitur:** Terdapat korelasi kuat antara fitur harga (Open, High, Low, Close), yang menunjukkan bahwa fitur-fitur ini saling berkaitan erat.
-* **Hubungan dengan Volume:** Volume transaksi memiliki korelasi yang lebih lemah dengan harga, menunjukkan bahwa volume mungkin tidak secara langsung mempengaruhi pergerakan harga dalam jangka pendek.
+* **Distribusi Harga Penutupan (Close):** Harga penutupan Ethereum menunjukkan variasi yang signifikan, yang mencerminkan sifat volatilitas tinggi pada pasar cryptocurrency. Distribusi ini tidak simetris dan memiliki beberapa puncak (multimodal).
+* **Distribusi Volume:** Volume transaksi bervariasi secara signifikan, dengan beberapa periode menunjukkan lonjakan aktivitas perdagangan yang tinggi, kemungkinan terkait dengan peristiwa pasar tertentu.
+
+### Multivariate Analysis EDA
+
+* **Korelasi Antar Fitur:** Terdapat korelasi yang sangat kuat antara fitur harga (Open, High, Low, Close), dengan nilai korelasi mendekati 1. Hal ini menunjukkan bahwa fitur-fitur tersebut saling berkaitan erat dan bergerak bersama dalam pola yang serupa.
+* **Hubungan dengan Volume:** Volume transaksi menunjukkan korelasi yang lebih lemah dengan fitur harga. Hal ini mengindikasikan bahwa volume mungkin tidak secara langsung memengaruhi pergerakan harga dalam jangka pendek, meskipun tetap relevan untuk analisis lebih lanjut.
 
 ## Data Preparation
 
