@@ -108,27 +108,32 @@ Berikut adalah tahapan data preparation yang dilakukan secara runtut sesuai deng
 ---
 
 ## Modeling
-Tiga model machine learning diterapkan untuk memprediksi harga Ethereum:
+## Model Selection & Tuning
 
-- **K-Nearest Neighbors (KNN)**  
-  - Cara Kerja: Mencari 10 tetangga terdekat (Euclidean) dan mengambil rata-rata target.  
-  - Parameter: `n_neighbors=10`.  
-  - Kelebihan: Mudah diimplementasikan, interpretasi intuitif.  
-  - Kekurangan: Sensitif terhadap skala dan outlier; lambat pada dataset besar.
+Dalam proyek ini, digunakan tiga model machine learning berbeda untuk memprediksi harga penutupan Ethereum 30 hari ke depan: K-Nearest Neighbors (KNN), Random Forest, dan AdaBoost. Pemilihan didasarkan pada karakteristik data fluktuatif dan sifat deret waktu yang memerlukan pendekatan berbasis pola historis.
 
-- **Random Forest**  
-  - Cara Kerja: Ensemble dari 50 decision trees; prediksi akhir diambil rata-rata.  
-  - Parameter: `n_estimators=50, max_depth=16, random_state=42`.  
-  - Kelebihan: Mengurangi overfitting, robust terhadap outlier.  
-  - Kekurangan: Kompleks, membutuhkan sumber daya komputasi lebih.
+| Model        | Cara Kerja                                                                | Parameter                                                                                             | Kelebihan                                                                     | Kekurangan                                                                       |
+| ------------ | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| **KNN**      | Mencari 10 tetangga terdekat (Euclidean) dan merata-rata target tetangga. | `n_neighbors=10` (uji coba: 5, 10, 15 — pilih 10 untuk MSE terendah)                                  | Implementasi sederhana, intuitif; efektif menangkap pola lokal.               | Sensitif skala & outlier; lambat pada dataset besar (diatasi normalisasi & IQR). |
+| **RF**       | Ensemble 50 decision trees, prediksi rata-rata hasil pohon.               | `n_estimators=50, max_depth=16, random_state=42` (tuning pada n\_estimators 50–100, max\_depth 10–20) | Robust terhadap outlier; insight pentingnya fitur; cocok untuk data kompleks. | Kompleks, butuh lebih banyak sumber daya komputasi.                              |
+| **AdaBoost** | Boost weak learners berurutan, fokus pada kesalahan sebelumnya.           | `n_estimators=50, learning_rate=0.05` (tuning pada n\_estimators 50–100, learning\_rate 0.01–0.1)     | Meningkatkan akurasi model dasar; efektif pada data kompleks.                 | Sensitif terhadap noise & outlier (penanganan IQR membantu).                     |
 
-- **AdaBoost**  
-  - Cara Kerja: Menggabungkan weak learners secara berurutan dengan pembobotan.  
-  - Parameter: `n_estimators=50, learning_rate=0.05, random_state=42`.  
-  - Kelebihan: Meningkatkan akurasi model dasar.  
-  - Kekurangan: Sensitif terhadap noise dan outlier.
+### Proses Tuning
 
-Ketiga model dievaluasi, dan model terbaik dipilih berdasarkan metrik evaluasi.
+* **KNN**: Uji `n_neighbors` (5, 10, 15); pilih 10 karena MSE validasi terendah.
+* **Random Forest**: Uji `n_estimators` (50–100) dan `max_depth` (10–20); pilih kombinasi yang optimal (50, 16).
+* **AdaBoost**: Uji `n_estimators` (50–100) dan `learning_rate` (0.01–0.1); pilih (50, 0.05) untuk performa terbaik.
+
+Setiap model dievaluasi menggunakan **Mean Squared Error (MSE)** dan **R² Score** pada data uji.
+
+### Hasil Performa
+
+* **KNN:** MSE = 6100.06, R² = 0.8259 (terbaik)
+* **Random Forest:** MSE = 7163.01, R² = 0.7955
+* **AdaBoost:** MSE = 6203.98, R² = 0.8229
+
+**Kesimpulan:** KNN dipilih sebagai model terbaik berdasarkan metrik, namun RF dan AdaBoost tetap kompetitif dan dapat digunakan sesuai kebutuhan, terutama saat ketahanan terhadap outlier diperlukan.
+
 
 ---
 
